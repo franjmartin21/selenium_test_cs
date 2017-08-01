@@ -14,6 +14,10 @@ public class ParalellTest implements Runnable {
 
     private static final String URL = "https://perf.creditsesame.com/login";
 
+    private static final String USER = "";
+
+    private static final String PASSWORD = "";
+
     private static final int NUM_THREADS = 10;
 
     private static final int NUM_ITERATIONS = 10;
@@ -38,8 +42,8 @@ public class ParalellTest implements Runnable {
                 driver.get(URL);
                 sessionsUsed.add(driver.manage().getCookieNamed("JSESSIONID").getValue());
                 JavascriptExecutor executor = (JavascriptExecutor)driver;
-                executor.executeScript("document.getElementsByName('email')[0].value='test1@creditsesame.com'");
-                executor.executeScript("document.getElementsByName('password')[0].value='password'");
+                executor.executeScript("document.getElementsByName('email')[0].value='" + USER + "'");
+                executor.executeScript("document.getElementsByName('password')[0].value='" + PASSWORD + "'");
                 executor.executeScript("document.getElementById('loginButton').click()");
                 Thread.sleep(2000);
                 sessionsUsed.add(driver.manage().getCookieNamed("JSESSIONID").getValue());
@@ -50,7 +54,7 @@ public class ParalellTest implements Runnable {
     }
 
     public static void main(String [] args) throws InterruptedException {
-        System.setProperty("webdriver.gecko.driver","/home/francisco/Trabajo/selenium/geckodriver");
+        System.setProperty("webdriver.gecko.driver","/home/javier/Francisco/geckodriver");
         for(int i = 0; i < NUM_THREADS; i++){
             Set<String> sessionsUsed = new HashSet<String>();
             Thread thread = new Thread(new ParalellTest(sessionsUsed));
@@ -62,8 +66,6 @@ public class ParalellTest implements Runnable {
         for(int i = 0; i < threadList.size(); i++){
             threadList.get(i).join();
         }
-
-
         checkSets(sessionSetList);
     }
     private static void checkSets(List<Set<String>> sessionSetList){
